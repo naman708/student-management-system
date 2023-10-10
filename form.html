@@ -1,0 +1,116 @@
+<!-- views/form.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <title>Product Form</title>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1 class="title">Student Mangaement System </h1>
+      <nav class="navbar navbar-expand-sm bg-light navbar-dark" id="nav">
+         <form  method="POST" id="formapp" class="input-group">
+        <label for="name" class="form-label">Select Date :</label>
+        <input type="Date" id="name" name="name"  required ><br>
+        <button type="submit" class="btn btn-dark">Search</button>
+      </form>
+    </nav>
+    </header>
+    <div class="container list-group-item ">
+     <form action="" class=" " id="form2">
+      <div class="form-check form-inline">
+        <label class="form-check-label mr-3" for="s1">Naman</label>
+        <input type="radio" class="form-check-input mr-3 ml-5 " id="s1p" name="optradio" value="P" >Present
+        <input type="radio" class="form-check-input mr-3 ml-5" id="s1a" name="optradio" value="A" >Absent
+      </div>
+      <div class="form-check form-inline">
+        <label class="form-check-label mr-3" for="s2">Prabal</label>
+        <input type="radio" class="form-check-input mr-3 ml-5 " id="s2p" name="optradio" value="P" >Present
+        <input type="radio" class="form-check-input mr-3 ml-5" id="s2a" name="optradio" value="A" >Absent
+      </div>
+      <div class="form-check form-inline">
+        <label class="form-check-label mr-3" for="s3">Praveen</label>
+        <input type="radio" class="form-check-input mr-3 ml-5 " id="s3p" name="optradio" value="P" >Present
+        <input type="radio" class="form-check-input mr-3 ml-5" id="s3a" name="optradio" value="A" >Absent
+      </div>
+      <div class="form-check form-inline">
+        <label class="form-check-label mr-3" for="s4">Pankaj</label>
+        <input type="radio" class="form-check-input mr-3 ml-5 " id="s4p" name="optradio" value="P" >Present
+        <input type="radio" class="form-check-input mr-3 ml-5" id="s4a" name="optradio" value="A" >Absent
+      </div>
+      <div class="form-check form-inline">
+        <label class="form-check-label mr-3" for="s5">Ombati</label>
+        <input type="radio" class="form-check-input mr-3 ml-5 " id="s5p" name="optradio" value="P" >Present
+        <input type="radio" class="form-check-input mr-3 ml-5" id="s5a" name="optradio" value="A" >Absent
+      </div>
+      <button type="submit" class="btn btn-dark">Mark Attendence</button>
+    </form>
+    </div>
+  </div>
+  
+</body>
+</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+<script >
+  const form=document.getElementById('formapp');
+  const userlist=document.getElementById('applist');
+ 
+
+  form.addEventListener('submit',onsubmit)
+  function onsubmit(e){
+    e.preventDefault();
+    
+    const obj={
+      name,
+      description
+      
+    };
+    axios.post("http://localhost:3000/get-product",obj)
+    .then((response)=>{
+      console.log(response);
+     // window.location.href = "display.html";
+     showuser(response.data.newuserdetails)
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+   I1.value='';
+    I2.value='';
+
+  }
+  function showuser(user){
+    const li=document.createElement('li');
+    li.className="list-group-item";
+    const delbtn=document.createElement('button');
+    delbtn.className='btn btn-danger btn-sm float-right delete';
+    delbtn.appendChild(document.createTextNode('delete'));
+   
+    li.appendChild(document.createTextNode(`${user.name}--->${user.description}`));
+    li.appendChild(delbtn);
+    userlist.appendChild(li);
+    delbtn.onclick=()=>{
+      axios.delete(`http://localhost:3000/del-product/${user.id}`)
+      .then((res)=>{
+        userlist.removeChild(li);
+      })
+      .catch((err)=>{
+        console.log(err);
+      })
+
+
+    };
+
+  }
+  window.addEventListener('DOMContentLoaded', () => {
+    axios.get("http://localhost:3000/add-product")
+        .then((res) => {
+            for (var i = 0; i < res.data.alluser.length; i++) {
+                showuser(res.data.alluser[i]);
+            }
+        })
+        .catch((err) => console.log(err));
+})
+</script>
